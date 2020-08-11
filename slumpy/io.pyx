@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, wraparound=False, nonecheck=False, cdivision=True
+# distutils: language=c++
 
 import numpy as np
 import json
@@ -24,8 +26,8 @@ def parse_vertex(tokens, vertexBuffer, stats, filled):
 
     vertexBuffer[filled: filled + 3] = vec
 
-    np.minimum(stats['min'], vec, out=stats['min'])
-    np.maximum(stats['max'], vec, out=stats['max'])
+    np.minimum(stats['min'], vec, out=stats['min'], dtype=np.float32)
+    np.maximum(stats['max'], vec, out=stats['max'], dtype=np.float32)
 
 
 def setup_normal(vertexIDs, vertexBuffer):
@@ -133,8 +135,8 @@ def load_with_normals(lines, counts, storeIDs):
     rvert = np.empty(counts['v'] * 3, dtype=np.float32)
     rnorm = np.empty(counts['v'] * 3, dtype=np.float32)
     stats = {
-        'min': np.array([np.inf, np.inf, np.inf]),
-        'max': np.array([-np.inf, -np.inf, -np.inf])
+        'min': np.array([np.inf, np.inf, np.inf], dtype=np.float32),
+        'max': np.array([-np.inf, -np.inf, -np.inf], dtype=np.float32)
     }
 
     filledVert = 0
@@ -375,48 +377,32 @@ def serialize_array(array, dtype):
 
 
 def serialize_obj(data):
-    serialized = {
-        'type': 'obj',
-        'vertices': serialize_array(data['vertices'], np.float32),
-        'normals': serialize_array(data['normals'], np.float32),
-        'stats': {
-            'min': serialize_array(data['stats']['min'], np.float32),
-            'max': serialize_array(data['stats']['max'], np.float32)
-        },
+    data['vertices'] = serialize_array(data['vertices'], np.float32)
+    data['normals'] = serialize_array(data['normals'], np.float32)
+    data['stats'] = {
+        'min': serialize_array(data['stats']['min'], np.float32),
+        'max': serialize_array(data['stats']['max'], np.float32)
     }
 
     if 'objects' in data:
-        serialized['objects'] = serialize_array(data['objects'], np.uint32)
-        serialized['idToObj'] = data['idToObj']
-        serialized['objToId'] = data['objToId']
-
-    return serialized
+        data['objects'] = serialize_array(data['objects'], np.uint32)
 
 
 def serialize_geo(data):
-    serialized = {
-        'type': 'geo',
-        'lineVertices': serialize_array(data['lineVertices'], np.float32),
-    }
+    data['lineVertices'] = serialize_array(data['lineVertices'], np.float32)
 
     if 'lineObjects' in data:
-        serialized['lineObjects'] = serialize_array(data['lineObjects'], np.uint32)
-        serialized['idToObj'] = data['idToObj']
-        serialized['objToId'] = data['objToId']
-        serialized['metadata'] = data['metadata']
-
-    return serialized
+        data['lineObjects'] = serialize_array(data['lineObjects'], np.uint32)
 
 
-def serialize(models):
-    sers = []
-    for model in models:
+def serialize(models: dict):
+    for key, model in models.items():
         if model['type'] == 'obj':
-            sers.append(serialize_obj(model))
+            serialize_obj(model)
         elif model['type'] == 'geo':
-            sers.append(serialize_geo(model))
+            serialize_geo(model)
 
-    return sers
+    return models
 
 def to_json(data, filename):
     data = json.dumps(data, separators=(',', ':'))

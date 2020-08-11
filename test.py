@@ -1,13 +1,15 @@
 from slumpy.io import open_obj, open_geojson, serialize, to_json
+from slumpy.height import height_map
 
-
-
-
-
-modelStr = open_geojson("../demo/assets/bubny/TSK_ulice.json", storeIDs=True)
-modelStr['name'] = 'streets'
+#modelStr = open_geojson("../demo/assets/bubny/TSK_ulice.json", storeIDs=True)
 modelTer = open_obj("../demo/assets/bubny/bubny_ter.obj")
-modelTer['name'] = 'terrain'
+hmap = height_map(modelTer, 4096)
 
-data = serialize([modelTer, modelStr])
-to_json(data, 'bubny.json')
+print(hmap)
+#data = serialize({
+#    'terrain': modelTer,
+#    'streets': modelStr
+#})
+
+
+#to_json(data, 'bubny.json')

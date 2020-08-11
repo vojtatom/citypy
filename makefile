@@ -14,5 +14,7 @@ clean:
     	find . -type f -name '*.so' -exec rm {} +;\
     	find ./slumpy -type f -name '*.html' -exec rm {} +;\
     	find . -type f -name '*.c' -exec rm {} +;\
-    	find . -type f -name '*.cpp' -not -path "*/slumpy*" -exec rm {} +;\
+		find . -type f -name '*.cpp' -exec rm {} +;\
 	)
+
+#find . -type f -name '*.cpp' -not -path "*/slumpy*" -exec rm {} +;\
