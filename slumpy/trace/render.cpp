@@ -7,6 +7,62 @@
 
 using namespace std;
 
+inline void validate_add(float low, float high, float & factor, float & out, float & value) {
+    if (value >= low && value <= high) {
+        factor += 1.0f;
+        out += value;
+    }
+}
+
+void denoise(float * height, unsigned int x, unsigned int y, float low, float high) {
+    
+    float value;
+    float factor;
+    bool t, b, r, l;
+    for (size_t j = 0; j < y; j++)
+    {
+        for (size_t i = 0; i < x; i++)
+        {
+            if (height[j * x + i] < low || height[j * x + i] > high) {
+                value = 0;
+                factor = 0;
+
+                t = (j == 0);
+                b = (j == y - 1);
+                r = (i == x - 1);
+                l = (i == 0);
+                
+                //top row
+                if (!t) {
+                    if (!l)
+                        validate_add(low, high, factor, value, height[(j - 1) * x + (i - 1)]);
+                    validate_add(low, high, factor, value, height[(j - 1) * x + i]);
+                    if (!r)
+                        validate_add(low, high, factor, value, height[(j - 1) * (x + 1) + i]);
+                }
+
+                //mid row
+                if (!l)
+                    validate_add(low, high, factor, value, height[j * x + (i - 1)]);
+                if (!r)
+                    validate_add(low, high, factor, value, height[j * x + (i + 1)]);
+
+                //bottom row
+                if (!b) {
+                    if (!l)
+                        validate_add(low, high, factor, value, height[(j + 1) * x + (i - 1)]);
+                    validate_add(low, high, factor, value, height[(j + 1) * x + i]);     
+                    if (!r)
+                        validate_add(low, high, factor, value, height[(j + 1) * x + (i + 1)]);
+                }   
+
+                height[j * x + i] = value / factor; 
+            }
+        }
+    }
+}
+
+
 void height_map(float * vertices, unsigned int vsize, float * height, unsigned int x, unsigned int y, float defau) {
 
     size_t num_tri = vsize / 9;
@@ -40,12 +96,14 @@ void height_map(float * vertices, unsigned int vsize, float * height, unsigned i
 
             bvh.traceRegualarRay(ray, false);
 
-            if (ray.t == RTINFINITY)
+            if (fabs(ray.t - RTINFINITY) < RTEPSILON)
                 height[j * x + i] =  defau;
             else
                 height[j * x + i] = TOP_HEIGHT - ray.t;
         }
     }
+
+    denoise(height, x, y, bounds.low.z, bounds.high.z);
 
     for (size_t i = 0; i < num_tri; ++i)
         delete triangles[i];

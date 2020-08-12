@@ -10,6 +10,9 @@ hmap = height_map(modelTer, 4096)
 
 
 mapdata = hmap['data'].reshape((hmap['height'], hmap['width']))
+print(np.amin(hmap['data']))
+print(np.amax(hmap['data']))
+
 
 plt.imshow(mapdata, cmap='gray', clim=(0, 500))
 plt.show()
