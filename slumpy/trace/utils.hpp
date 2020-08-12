@@ -4,9 +4,10 @@
 #define RTEPSILON 3.402823e-15 * 2
 #define RTTRACEEPSILON 3.402823e-4
 
-#define NUMTHREADS 8
-#define TOP_HEIGHT 9000
-
+//speedups
 //#define MULTITHREAD
+//#define NUMTHREADS 8
 //#define USESSE
-#define USEBVH
+
+//default top height for heightmap
+#define TOP_HEIGHT 9000

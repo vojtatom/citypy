@@ -9,7 +9,7 @@ cimport numpy as np
 
 
 
-cdef DTYPE[::1] cheight_map(DTYPE[::1] vert, DTYPE[::1] bmin, DTYPE[::1] bmax, INTDTYPE res):
+cdef cheight_map(DTYPE[::1] vert, DTYPE[::1] bmin, DTYPE[::1] bmax, INTDTYPE res):
     #create canvas
     cdef DTYPE x_size = bmax[0] - bmin[0]
     cdef DTYPE y_size = bmax[1] - bmin[1]
@@ -25,9 +25,8 @@ cdef DTYPE[::1] cheight_map(DTYPE[::1] vert, DTYPE[::1] bmin, DTYPE[::1] bmax, I
 
 
     cdef np.ndarray[DTYPE, ndim=1] hmap = np.empty((x * y,), dtype=np.float32)
-    print(vert.shape[0])
     height_map(&vert[0], vert.shape[0], &hmap[0], x, y, bmax[2])
-    return hmap
+    return hmap, x, y
 
 
 
@@ -38,8 +37,14 @@ def render_height_map(model, res):
     if not isinstance(model['vertices'],  np.ndarray):
         raise Exception("Vertices in spplied data are not instance of numpy array")
 
-    hmap = cheight_map(model['vertices'], model['stats']['min'], model['stats']['max'], res)
+    hmap, w, h = cheight_map(model['vertices'], model['stats']['min'], model['stats']['max'], res)
 
-    return np.asarray(hmap)
+    return {
+        'type': 'heightmap',
+        'data': np.asarray(hmap),
+        'width': w,
+        'height': h
+    }
+    
 
 

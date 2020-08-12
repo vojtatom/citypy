@@ -112,8 +112,6 @@ struct BVHInternalNode : public BVHNode {
 };
 
 
-
-
 class TDBVH {
 public:
     TDBVH() {};

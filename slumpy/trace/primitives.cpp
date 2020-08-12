@@ -10,7 +10,6 @@ Triangle::Triangle(vec3 _a, vec3 _b, vec3 _c)
 
 // Möller-Trumbore algorithm
 // Find intersection point - from PBRT - www.pbrt.org
-// from https://cent.felk.cvut.cz/courses/APG/triangle-pbrt.cpp
 // the source is modified, inspired by above
 float Triangle::intersect(Ray & ray, bool cullback,  float & b1, float & b2)
 {

@@ -395,16 +395,22 @@ def serialize_geo(data):
         data['lineObjects'] = serialize_array(data['lineObjects'], np.uint32)
 
 
-def serialize(models: dict):
+def serialize_height(data):
+    data['data'] = serialize_array(data['data'], np.float32)
+
+
+def serialize_all(models: dict):
     for key, model in models.items():
         if model['type'] == 'obj':
             serialize_obj(model)
         elif model['type'] == 'geo':
             serialize_geo(model)
+        elif model['type'] == 'heightmap':
+            serialize_height(model)
 
     return models
 
-def to_json(data, filename):
+def convert_to_json(data, filename):
     data = json.dumps(data, separators=(',', ':'))
     #data = json.dumps(data, separators=[',\n', ':'], indent=2)
     

@@ -19,19 +19,10 @@ BBox TDBVH::build(Triangle ** triangles, size_t count)
     root = (BVHInternalNode * ) buildRecursive(rootBox, 0, count, 0, 0);
 
     delete [] boxes;
-
     return rootBox;
 }
 
 BVHNode * TDBVH::buildRecursive(BBox & parent_box, size_t from, size_t to, unsigned char axis, size_t depth){
-    //debug info
-    /*for (size_t i = 0; i < depth; i++)
-    {
-        cout << "  ";
-    }
-    cout << "from " << from << " to " << to << endl;*/
-    //addBoxToOBJ(obj, parent_box);
-
 
     //leaf
     if (from == to - 1)
@@ -143,15 +134,8 @@ void TDBVH::traceRegualarRay(Ray & ray, bool culling)
     ray.hit = nullptr; //nic jsem neprotnul
     ray.t = RTINFINITY;
 
-    //cout << root->box.low << " " << root->box.high << endl;
-    //cout << ray.origin << " " << ray.dir << endl;
-    //cout << root << " " << !root->box.intersects(ray, tmin, tmax) << endl;
-    
     if (root == nullptr || !root->box.intersects(ray, tmin, tmax))
-    {
-        //cout << "root fail" << endl;
         return;
-    }
 
 
     BVHNode * node = root;

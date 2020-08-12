@@ -1,15 +1,25 @@
-from slumpy.io import open_obj, open_geojson, serialize, to_json
-from slumpy.height import render_height_map
+from slumpy import obj, geojson, height_map, serialize, to_json
 
-#modelStr = open_geojson("../demo/assets/bubny/TSK_ulice.json", storeIDs=True)
-modelTer = open_obj("../demo/assets/bubny/bubny_ter.obj")
-hmap = render_height_map(modelTer, 4096)
-
-print(hmap)
-#data = serialize({
-#    'terrain': modelTer,
-#    'streets': modelStr
-#})
+import matplotlib.pyplot as plt
+import numpy as np
 
 
-#to_json(data, 'bubny.json')
+modelStr = geojson("../demo/assets/bubny/TSK_ulice.json", storeIDs=True)
+modelTer = obj("../demo/assets/bubny/bubny_ter.obj")
+hmap = height_map(modelTer, 4096)
+
+
+mapdata = hmap['data'].reshape((hmap['height'], hmap['width']))
+
+plt.imshow(mapdata, cmap='gray', clim=(0, 500))
+plt.show()
+
+
+data = serialize({
+    'terrain': modelTer,
+    'streets': modelStr,
+    'height': hmap
+})
+
+
+to_json(data, 'bubny.json')

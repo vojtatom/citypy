@@ -127,7 +127,6 @@ inline vec3 operator*(const float &op1, const vec3 &op2)
     return vec3(op2.x * op1, op2.y * op1, op2.z * op1);
 }
 
-//tu byl bug op1 / op2  a ne op2 / op1 jako výše 
 inline vec3 operator/(const float &op1, const vec3 &op2)
 {
     return vec3(op1 / op2.x, op1 / op2.y, op1 / op2.z);

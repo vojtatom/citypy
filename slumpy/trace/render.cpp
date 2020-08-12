@@ -23,24 +23,27 @@ void height_map(float * vertices, unsigned int vsize, float * height, unsigned i
 
     TDBVH bvh;
     BBox bounds = bvh.build(triangles, num_tri);
-    float step = (bounds.high.x - bounds.low.x) / x;
+    float step = (bounds.high.x - bounds.low.x) / (float) x;
+    //float stepy = (bounds.high.y - bounds.low.y) / (float) y;
     Ray ray;
 
     //always point down
     ray.dir = vec3(0, 0, -1);
 
-    for (size_t i = 0; i < x; i++)
+    for (size_t j = 0; j < y; j++)
     {
-        cout << i << "/" << x << endl;
-        for (size_t j = 0; j < y; j++)
+        for (size_t i = 0; i < x; i++)
         {
-            ray.origin = vec3(bounds.low.x + (i + 0.5) * step, bounds.low.y + (y + 0.5) * step, TOP_HEIGHT); 
+            ray.origin = vec3(bounds.low.x + (i + 0.5f) * step, 
+                              bounds.low.y + (j + 0.5f) * step, 
+                              TOP_HEIGHT);
+
             bvh.traceRegualarRay(ray, false);
 
             if (ray.t == RTINFINITY)
-                height[j * y + i] =  defau;
+                height[j * x + i] =  defau;
             else
-                height[j * y + i] = TOP_HEIGHT - ray.t;
+                height[j * x + i] = TOP_HEIGHT - ray.t;
         }
     }
 
