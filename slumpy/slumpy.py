@@ -1,6 +1,6 @@
 from .io import open_obj, open_geojson, serialize_all, convert_to_json #pylint: disable=no-name-in-module,import-error
 from .height import render_height_map #pylint: disable=no-name-in-module,import-error
-
+from .graph import graph_from_geo
 
 def obj(filename, storeIDs = False):
     """Open .obj file and covert it into GPU-friendly format.
@@ -71,3 +71,14 @@ def height_map(model, res):
         dict: Slumpy model of the heightmap, contains np.float32 array, width and height
     """
     return render_height_map(model, res)
+
+def geograph(geomodel):
+    """Compute graph from slumpy geo model.
+
+    Args:
+        geomodel (dict): slupy model obtained by geojson function
+
+    Returns:
+        dict: Graph of neighboring nodes, nodes are identified by their coordinates.
+    """
+    return graph_from_geo(geomodel)

@@ -399,6 +399,13 @@ def serialize_height(data):
     data['data'] = serialize_array(data['data'], np.float32)
 
 
+def serialize_graph(data):
+    graph_data = {}
+    for k, v in data['data'].items():
+        graph_data[serialize_array(k, np.float32)] = [ serialize_array(node, np.float32) for node in v ]
+    data['data'] = graph_data
+
+
 def serialize_all(models: dict):
     for key, model in models.items():
         if model['type'] == 'obj':
@@ -407,11 +414,26 @@ def serialize_all(models: dict):
             serialize_geo(model)
         elif model['type'] == 'heightmap':
             serialize_height(model)
+        elif model['type'] == 'graph':
+            serialize_graph(model)
 
     return models
 
+
+class MyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(MyEncoder, self).default(obj)
+
+
 def convert_to_json(data, filename):
-    data = json.dumps(data, separators=(',', ':'))
+    data = json.dumps(data, separators=(',', ':'), cls=MyEncoder)
     #data = json.dumps(data, separators=[',\n', ':'], indent=2)
     
     with open(filename, 'w') as file:
