@@ -1,4 +1,4 @@
-from .io import open_obj, open_geojson, serialize_all, convert_to_json #pylint: disable=no-name-in-module,import-error
+from .io import open_obj, open_geojson, serialize_all, convert_to_json, open_cityjson #pylint: disable=no-name-in-module,import-error
 from .height import render_height_map #pylint: disable=no-name-in-module,import-error
 from .graph import graph_from_geo
 
@@ -35,6 +35,18 @@ def geojson(filename, dims = 2, storeIDs = False):
         dict: Dictionary containing labeled buffers and additional required metadata.
     """
     return open_geojson(filename, dims, storeIDs)
+
+def cityjson(filename):
+    """Open .json file with CityJSON structure. Load the contents
+    and filter out. the geometry.
+
+    Args:
+        filename (string): .json source file
+
+    Returns:
+        dict: Dictionary containing loaded metadata for each object.
+    """
+    return open_cityjson(filename)
 
 def serialize(models):
     """Serialize data into a format that can be easily stringified.

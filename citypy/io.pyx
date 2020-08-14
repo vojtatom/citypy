@@ -274,6 +274,26 @@ def open_obj(filename, storeIDs = False):
         return load_with_normals(lines, counts, storeIDs)
 
 
+
+def open_cityjson(filename):
+    global oid
+    print(f"Loading geoJson: {filename}")
+
+    with open(filename, 'r') as file:
+        contents = file.read()
+
+    contents = json.loads(contents)
+    contents = contents['CityBuildings']
+
+    for b in contents:
+        del b['geometry']
+        del b['semantic']['values']
+    
+    return {
+        'type': 'city',
+        'data': contents
+    }
+
 def countLineVerts(features):
     points = 0
     for feature in features:
