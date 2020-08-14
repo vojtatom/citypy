@@ -350,13 +350,19 @@ def open_geojson(filename, dims = 2, storeIDs = False):
                     if i > 0 and i < last: 
                         lineVertices[lineFilled:lineFilled + dims] = coord
                         lineFilled += dims
+
+                        if storeIDs:
+                            lineIds[lineIdsFilled] = oid
+                            lineIdsFilled += 1    
                     
+
                     lineVertices[lineFilled:lineFilled + dims] = coord
                     lineFilled += dims
 
                     if storeIDs:
                         lineIds[lineIdsFilled] = oid
                         lineIdsFilled += 1    
+
 
             elif geom['type'] == 'Polygon':
                 pass #TODO
