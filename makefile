@@ -12,9 +12,9 @@ clean:
 	@-( \
 		find . -type d -wholename '*/build' -exec rm -r {} +;\
     	find . -type f -name '*.so' -exec rm {} +;\
-    	find ./slumpy -type f -name '*.html' -exec rm {} +;\
+    	find ./citypy -type f -name '*.html' -exec rm {} +;\
     	find . -type f -name '*.c' -exec rm {} +;\
-		find . -type f -name '*.cpp' -not -path "*/slumpy/trace*" -exec rm {} +;\
+		find . -type f -name '*.cpp' -not -path "*/citypy/trace*" -exec rm {} +;\
 	)
 
-#find . -type f -name '*.cpp' -not -path "*/slumpy*" -exec rm {} +;\
+#find . -type f -name '*.cpp' -not -path "*/citypy*" -exec rm {} +;\

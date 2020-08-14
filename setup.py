@@ -38,14 +38,14 @@ def makeExtension(extName, cfiles):
 		)
 
 # get the list of extensions
-extNames, cfiles = scandir("slumpy") 
+extNames, cfiles = scandir("citypy") 
 
 # and build up the set of Extension objects
 extensions = [makeExtension(name, cfiles) for name in extNames]
 
 setup(
-	name='slumpy',         # How you named your package folder (MyLib)
-	packages=['slumpy'],   # Chose the same as "name"
+	name='citypy',         # How you named your package folder (MyLib)
+	packages=['citypy'],   # Chose the same as "name"
 	# Start with a small number and increase it with every change you make
 	version='0.0.1',
 	# Chose a license from here: https://help.github.com/articles/licensing-a-repository
@@ -55,7 +55,7 @@ setup(
 	author='Vojtech Tomas',                   # Type in your name
 	author_email='tomas@vojtatom.cz',      # Type in your E-Mail
 	# Provide either the link to your github or to your website
-	url='https://github.com/vojtatom/slumpy',
+	url='https://github.com/vojtatom/citypy',
 	# I explain this later on
 	download_url='TODO',  #TODO
 	# Keywords that define your package best
