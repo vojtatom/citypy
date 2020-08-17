@@ -277,17 +277,16 @@ def open_obj(filename, storeIDs = False):
 
 def open_cityjson(filename):
     global oid
-    print(f"Loading geoJson: {filename}")
+    print(f"Loading cityJson: {filename}")
 
     with open(filename, 'r') as file:
         contents = file.read()
 
     contents = json.loads(contents)
-    contents = contents['CityBuildings']
+    contents = contents['CityObjects']
 
     for b in contents:
-        del b['geometry']
-        del b['semantic']['values']
+        del contents[b]['geometry']
     
     return {
         'type': 'city',

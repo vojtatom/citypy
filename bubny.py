@@ -12,7 +12,7 @@ def export_bubny():
     graph = graph_from_tsk("../demo/assets/bubny/TSK_ulice.json")
 
     modelBri = obj("../demo/assets/bubny/bubny_most_filtered.obj", storeIDs=True)
-    metaBri = obj("../demo/assets/bubny/bubny_most.json")
+    metaBri = cityjson("../demo/assets/bubny/bubny_most.json")
     modelTer = obj("../demo/assets/bubny/bubny_ter.obj")
 
     vert = np.hstack((modelTer['vertices'], modelBri['vertices']))
@@ -26,7 +26,7 @@ def export_bubny():
     hmap = height_map(surfaceModel, 4096)
 
     modelBui = obj("../demo/assets/bubny/bubny_bud.obj", storeIDs=True)
-    metaBui = obj("../demo/assets/bubny/bubny_bud.json")
+    metaBui = cityjson("../demo/assets/bubny/bubny_bud.json")
 
 
     mapdata = hmap['data'].reshape((hmap['height'], hmap['width']))
